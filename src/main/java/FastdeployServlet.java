@@ -4,8 +4,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
@@ -47,10 +46,19 @@ public class FastdeployServlet extends HttpServlet {
 	protected List<String> getFileNames() {
 		String include = getInitParameter(Parameters.INCLUDE_PATTERN);
 		String[] lines = include.split("\n");
-		List<String> files = new ArrayList<String>();
+		List<String> fileList = new ArrayList<String>();
 		for (String line : lines) {
-			files.addAll(filePatternParser.getFileNames(line, getServletContext().getRealPath("")));
+			List<String> list = filePatternParser.getFileNames(line, getFileRoot());
+			for (String file : list) {
+				if (!fileList.contains(file)) {
+					fileList.add(file);
+				}
+			}
 		}
-		return files;
+		return fileList;
+	}
+
+	private String getFileRoot() {
+		return getInitParameter(Parameters.ROOT_DIR, getServletContext().getRealPath(""));
 	}
 }

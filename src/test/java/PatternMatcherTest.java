@@ -34,7 +34,7 @@ public class PatternMatcherTest extends TestCase {
 		match("robCos1234.js", singleFile, multipleFileNestedDir, singleFileNestedDir, multipleFile, singleFileMultipleNestedDir, multipleFileMultipleNestedDir);
 	}
 
-	@Test     
+	@Test
 	public void testMultipleFileNestedDir() {
 		boolean singleFile = false;
 		boolean multipleFileNestedDir = true;

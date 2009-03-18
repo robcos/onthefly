@@ -13,9 +13,13 @@
 			<param-value>text/javascript</param-value>
 		</init-param>
 		<init-param>
+			<param-name>root.dir</param-name>
+			<param-value>/home/robcos/src/eniro/ego_2.17/MapApi3/src/main/js/enimap2</param-value>
+		</init-param>
+		<init-param>
 			<param-name>include.pattern</param-name>
 			<param-value>
-				testfiles/*.js
+				**/*.js
 			</param-value>
 		</init-param>
 	</servlet>

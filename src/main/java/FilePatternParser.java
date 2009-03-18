@@ -55,8 +55,10 @@ public class FilePatternParser {
 						return file.matches(pattern);
 					}
 				});
-				for (File f : files) {
-					result.add(f.getAbsolutePath());
+				if (files != null) {
+					for (File f : files) {
+						result.add(f.getAbsolutePath());
+					}
 				}
 				continue;
 			}

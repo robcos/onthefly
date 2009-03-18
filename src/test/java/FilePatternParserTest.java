@@ -38,21 +38,22 @@ public class FilePatternParserTest extends TestCase {
 		fileInNestedDir.createNewFile();
 		file2InNestedDir.createNewFile();
 
-//		file.deleteOnExit();
-//		file2.deleteOnExit();
-//		fileInNestedDir.deleteOnExit();
-//		file2InNestedDir.deleteOnExit();
+		file.deleteOnExit();
+		file2.deleteOnExit();
+		fileInNestedDir.deleteOnExit();
+		file2InNestedDir.deleteOnExit();
 	}
 
 	@After
 	@Override
 	public void tearDown() throws Exception {
-//		nestedDir.delete();
-//		nestedDir.getParentFile().delete();
-//		nestedDir.getParentFile().getParentFile().delete();
-//		nestedDir.getParentFile().getParentFile().getParentFile().delete();
+		nestedDir.delete();
+		nestedDir.getParentFile().delete();
+		nestedDir.getParentFile().getParentFile().delete();
+		nestedDir.getParentFile().getParentFile().getParentFile().delete();
 	}
 
+	@Test
 	public void testSingleFileInRoot() {
 		List<String> strings = parser.getFileNames("myfile.js", rootDir.getAbsolutePath());
 		assertEquals("1 file", 1, strings.size());
@@ -60,14 +61,26 @@ public class FilePatternParserTest extends TestCase {
 	}
 
 
-	//	@Test
+	@Test
 	public void testSingleFileInNestedDir() {
 		List<String> strings = parser.getFileNames("a/b/c/myFileInNestedDir.js", rootDir.getAbsolutePath());
 		assertEquals("1 file", 1, strings.size());
 		assertEquals("path matches", nestedDir.getAbsolutePath() + "/myFileInNestedDir.js", strings.get(0));
 	}
 
-	//	@Test
+	@Test
+	public void testSingleFileInNestedDirNonExisting() {
+		List<String> strings = parser.getFileNames("a/b/c/this_file_does_not_exist.js", rootDir.getAbsolutePath());
+		assertEquals("0 file", 0, strings.size());
+	}
+
+	@Test
+	public void testSingleFileInRootNonExisting() {
+		List<String> strings = parser.getFileNames("this_file_does_not_exist.js", rootDir.getAbsolutePath());
+		assertEquals("0 file", 0, strings.size());
+	}
+
+	@Test
 	public void testMultipleFileInRoot() {
 		List<String> files = parser.getFileNames("myfile*.js", rootDir.getAbsolutePath());
 		assertEquals("2 files", 2, files.size());
@@ -79,6 +92,7 @@ public class FilePatternParserTest extends TestCase {
 	}
 
 	//TODO add support for pattern **/myFile*Nested*.js
+	@Test
 	public void testMultipleFileInMultipleNestedDir() {
 		List<String> files = parser.getFileNames("**/myfile*NestedDir.js", rootDir.getAbsolutePath());
 		assertEquals("2 files", 2, files.size());
@@ -89,12 +103,21 @@ public class FilePatternParserTest extends TestCase {
 		}
 	}
 
+	@Test
 	public void testSingleFileInMultipleNestedDir() {
 		List<String> files = parser.getFileNames("**/myfileInNestedDir.js", rootDir.getAbsolutePath());
 		assertEquals("1 files", 1, files.size());
 		assertEquals("path matches", fileInNestedDir.getAbsolutePath(), files.get(0));
 	}
 
+	@Test
+	public void testSingleFileInMultipleNestedDir_nonExisting() {
+		List<String> files = parser.getFileNames("**/nonexistingfile.js", rootDir.getAbsolutePath());
+		assertEquals("0 files", 0, files.size());
+	}
+
+
+	@Test
 	public void testMultipleFileInNestedDir() {
 		List<String> files = parser.getFileNames("a/b/c/myfile*.js", rootDir.getAbsolutePath());
 		assertEquals("2 files", 2, files.size());
@@ -104,8 +127,12 @@ public class FilePatternParserTest extends TestCase {
 							file2InNestedDir.getAbsolutePath().equals(file);
 			assertTrue("path matches", match);
 		}
-
 	}
 
+	@Test
+	public void testMultipleFileInNestedDirNonExisting() {
+		List<String> files = parser.getFileNames("non_existing_dir/*.js", rootDir.getAbsolutePath());
+		assertEquals("0 files", 0, files.size());
+	}
 
 }
