@@ -29,8 +29,8 @@ public class FastdeployServlet extends HttpServlet {
 			String line;
 			while ((line = br.readLine()) != null) {
 				content.append(line);
-			}
-			content.append("\n");
+				content.append("\n");
+			}	
 		}
 		return content.toString();
 	}
