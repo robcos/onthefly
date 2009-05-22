@@ -2,6 +2,8 @@ package com.robcos.onthefly;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.mozilla.javascript.ErrorReporter;
+import org.mozilla.javascript.EvaluatorException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -9,9 +11,10 @@ import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
 import java.util.List;
 import java.util.ArrayList;
-import java.io.IOException;
-import java.io.FileReader;
-import java.io.BufferedReader;
+import java.io.*;
+
+import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
+import com.yahoo.platform.yui.compressor.CssCompressor;
 
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
@@ -25,10 +28,16 @@ public class Fastdeploy {
 	private String cache;
 	private boolean useCache = false;
 	private long lastModified;
+	private boolean useJavaScriptCompression;
+	private boolean useCssCompression;
 	private static long MS_IN_A_YEAR = 1000L * 60L * 60L * 24L * 365L;
 
 	public long getLastModified() {
 		return useCache ? lastModified : -1;
+	}
+
+	public void setUseCssCompression(boolean useCssCompression) {
+		this.useCssCompression = useCssCompression;
 	}
 
 	public String getContentType() {
@@ -63,6 +72,10 @@ public class Fastdeploy {
 		this.useCache = useCache;
 	}
 
+	public void setUseJavaScriptCompression(boolean useJavaScriptCompression) {
+		this.useJavaScriptCompression = useJavaScriptCompression;
+	}
+
 	protected List<String> getFileNames() {
 		String include = getIncludePattern();
 		String[] lines = include.split("\n");
@@ -93,7 +106,44 @@ public class Fastdeploy {
 				content.append("\n");
 			}
 		}
-		return content.toString();
+		String returnValue = content.toString();
+		if (useJavaScriptCompression) {
+			returnValue = compressJS(returnValue);
+		}
+		if (useCssCompression) {
+			returnValue = compressCSS(returnValue);
+		}
+
+		return returnValue;
+	}
+
+	private String compressJS(String returnValue) throws IOException {
+		JavaScriptCompressor c = new JavaScriptCompressor(new StringReader(returnValue), new ErrorReporter() {
+			public void warning(String s, String s1, int i, String s2, int i1) {
+				log.warn("Warning: " + s + ":" + s1 + ":" + i + ":" + s2 + ":" + i1);
+			}
+
+			public void error(String s, String s1, int i, String s2, int i1) {
+				log.error("Error: " + s + ":" + s1 + ":" + i + ":" + s2 + ":" + i1);
+			}
+
+			public EvaluatorException runtimeError(String s, String s1, int i, String s2, int i1) {
+				log.error("Runtime Error: " + s + ":" + s1 + ":" + i + ":" + s2 + ":" + i1);
+				return null;
+			}
+		});
+		StringWriter stringWriter = new StringWriter();
+		c.compress(stringWriter, -1, true, true, false, false);
+		returnValue = stringWriter.toString();
+		return returnValue;
+	}
+
+	private String compressCSS(String returnValue) throws IOException {
+		CssCompressor c = new CssCompressor(new StringReader(returnValue));
+		StringWriter stringWriter = new StringWriter();
+		c.compress(stringWriter, -1);
+		returnValue = stringWriter.toString();
+		return returnValue;
 	}
 
 	public void handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
