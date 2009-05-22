@@ -1,5 +1,8 @@
 package com.robcos.onthefly;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
@@ -14,10 +17,19 @@ import java.io.BufferedReader;
  * @author robcos - roberto.cosenza@infoflexconnect.se
  */
 public class Fastdeploy {
+	private Log log = LogFactory.getLog(this.getClass());
 	private FilePatternParser filePatternParser = new FilePatternParser();
 	private String contentType;
 	private String includePattern;
 	private String rootDir;
+	private String cache;
+	private boolean useCache = false;
+	private long lastModified;
+	private static long MS_IN_A_YEAR = 1000L * 60L * 60L * 24L * 365L;
+
+	public long getLastModified() {
+		return useCache ? lastModified : -1;
+	}
 
 	public String getContentType() {
 		return contentType;
@@ -43,6 +55,13 @@ public class Fastdeploy {
 		this.rootDir = rootDir;
 	}
 
+	public boolean isUseCache() {
+		return useCache;
+	}
+
+	public void setUseCache(boolean useCache) {
+		this.useCache = useCache;
+	}
 
 	protected List<String> getFileNames() {
 		String include = getIncludePattern();
@@ -60,6 +79,10 @@ public class Fastdeploy {
 	}
 
 	private String getContent() throws IOException {
+		if (cache != null) {
+			log.debug("Returning cached content");
+			return cache;
+		}
 		StringBuffer content = new StringBuffer();
 		for (String filename : getFileNames()) {
 			FileReader fr = new FileReader(filename);
@@ -76,7 +99,24 @@ public class Fastdeploy {
 	public void handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
 		ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
 		httpServletResponse.setContentType(getContentType());
+		if (useCache) {
+			httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() + MS_IN_A_YEAR);
+			httpServletResponse.setHeader("Cache-Control", "Cache-Control: public, max-age=31536000");
+		} else {
+			httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() - MS_IN_A_YEAR);
+			httpServletResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
+		}
 		servletOutputStream.print(getContent());
 		servletOutputStream.close();
+	}
+
+	public void init() throws IOException {
+		log.trace("init");
+		lastModified = System.currentTimeMillis();
+
+		if (useCache) {
+			log.info("Filling cache for pattern " + getIncludePattern() + " on dir " + getRootDir());
+			cache = getContent();
+		}
 	}
 }
