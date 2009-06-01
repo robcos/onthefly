@@ -23,11 +23,11 @@ public class FilePatternParser {
 	 */
 	public List<String> getFileNames(String filePattern, String root) {
 		List<String> result = new ArrayList<String>();
-		String[] rows = filePattern.split("\n");
+		String[] rows = filePattern.split(",");
 		File rootFile = new File(root);
 		for (String untrimmedRow : rows) {
 			final String row = untrimmedRow.trim();
-
+			System.out.println("row:" + row);
 			if (patternMatcher.isMultipleFileInMultipleNestedDir(row)
 					|| patternMatcher.isSingleFileInMultipleNestedDir(row)) {
 				String pattern = convertPatternToRegexp(row);

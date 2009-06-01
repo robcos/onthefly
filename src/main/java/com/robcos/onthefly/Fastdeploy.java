@@ -129,7 +129,7 @@ public class Fastdeploy {
 
 			public EvaluatorException runtimeError(String s, String s1, int i, String s2, int i1) {
 				log.error("Runtime Error: " + s + ":" + s1 + ":" + i + ":" + s2 + ":" + i1);
-				return null;
+				return new EvaluatorException(s, s1, i);
 			}
 		});
 		StringWriter stringWriter = new StringWriter();
