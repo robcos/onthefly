@@ -6,15 +6,11 @@
 		 version="2.5">
 
 	<servlet>
-		<servlet-name>js</servlet-name>
+		<servlet-name>js-classpath</servlet-name>
 		<servlet-class>com.robcos.onthefly.FastdeployServlet</servlet-class>
 		<init-param>
 			<param-name>content.type</param-name>
 			<param-value>text/javascript</param-value>
-		</init-param>
-		<init-param>
-			<param-name>root.dir</param-name>
-			<param-value>/home/robcos/src/eniro/ego_2.17/MapApi3/src/main/js/enimap2</param-value>
 		</init-param>
 		<init-param>
 			<param-name>include.pattern</param-name>
@@ -28,8 +24,27 @@
 			<param-value>true</param-value>
 		</init-param>
 	</servlet>
+	<servlet>
+		<servlet-name>js-filesystem</servlet-name>
+		<servlet-class>com.robcos.onthefly.FastdeployServlet</servlet-class>
+		<init-param>
+			<param-name>content.type</param-name>
+			<param-value>text/javascript</param-value>
+		</init-param>
+		<init-param>
+			<param-name>include.pattern</param-name>
+			<param-value>
+				firstfile.js
+				**/*.js
+			</param-value>
+		</init-param>
+	</servlet>
 	<servlet-mapping>
-		<servlet-name>js</servlet-name>
-		<url-pattern>/test.js</url-pattern>
+		<servlet-name>js-filesystem</servlet-name>
+		<url-pattern>/test-filesystem.js</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>js-classpath</servlet-name>
+		<url-pattern>/test-classpath.js</url-pattern>
 	</servlet-mapping>
 </web-app>
