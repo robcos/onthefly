@@ -3,20 +3,19 @@ package com.robcos.onthefly;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
  */
-public class FileSystemPatternParser implements FilePatternParser {
+public class FileSystemFileProvider implements FileProvider {
 	private PatternMatcher patternMatcher = new PatternMatcher();
 	private Log log = LogFactory.getLog(this.getClass());
 	private String root;
 
-	public FileSystemPatternParser(String root) {
+	public FileSystemFileProvider(String root) {
 		this.root = root;
 	}
 
@@ -113,4 +112,11 @@ public class FileSystemPatternParser implements FilePatternParser {
 		}
 		return files;
 	}
+
+	public BufferedReader getResource(String filename) throws FileNotFoundException {
+		log.debug("Trying to get resource " + filename + " from filesystem");
+		FileReader fr = new FileReader(filename);
+		return new BufferedReader(fr);
+	}
+
 }

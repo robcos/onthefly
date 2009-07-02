@@ -8,13 +8,13 @@ import org.junit.After;
 import java.io.File;
 import java.util.List;
 
-import com.robcos.onthefly.FilePatternParser;
+import com.robcos.onthefly.FileProvider;
 
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
  */
 public class FilePatternParserTest extends TestCase {
-	FilePatternParser parser;
+	FileProvider parser;
 	File file = null;
 	File file2 = null;
 	File fileInNestedDir = null;
@@ -29,7 +29,7 @@ public class FilePatternParserTest extends TestCase {
 		tempFile.delete(); //just to get a pointer to the temp dir
 
 		rootDir = new File(tempFile.getAbsolutePath());
-		parser = new FileSystemPatternParser(rootDir.getAbsolutePath());
+		parser = new FileSystemFileProvider(rootDir.getAbsolutePath());
 		nestedDir = new File(tempFile.getAbsolutePath() + "/a/b/c");
 		nestedDir.mkdirs();
 

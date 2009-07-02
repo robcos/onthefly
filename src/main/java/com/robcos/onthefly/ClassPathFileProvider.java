@@ -3,15 +3,14 @@ package com.robcos.onthefly;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-import java.io.File;
-import java.io.FilenameFilter;
+import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
  */
-public class ClassPathFilePatternParser implements FilePatternParser {
+public class ClassPathFileProvider implements FileProvider {
 	private PatternMatcher patternMatcher = new PatternMatcher();
 	private Log log = LogFactory.getLog(this.getClass());
 
@@ -32,5 +31,12 @@ public class ClassPathFilePatternParser implements FilePatternParser {
 		return result;
 	}
 
-
+	public BufferedReader getResource(String filename) throws FileNotFoundException {
+		log.debug("Trying to get resource " + filename + " from classpath");
+		InputStream stream = this.getClass().getResourceAsStream(filename);
+		if (stream == null) {
+			throw new FileNotFoundException("Could not find file " + filename + " in classpath");
+		}
+		return new BufferedReader(new InputStreamReader(stream));
+	}
 }
