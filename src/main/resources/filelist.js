@@ -1,4 +1,4 @@
-var myJsfiles = new Array(
-		"firstfile.js",
-		"core/secondfile.js"
-		);
+var myJsfiles = [
+	"firstfile.js",
+	"com/secondfile.js"
+];

@@ -24,13 +24,23 @@ public class FastdeployServlet extends HttpServlet {
 		fastdeploy.setContentType(getInitParameter(Parameters.CONTENT_TYPE, "text/javascript"));
 		String rootDir = getInitParameter(Parameters.ROOT_DIR, getServletContext().getRealPath(""));
 		boolean useClasspath = getInitParameter(Parameters.USE_CLASSPATH, false);
+		boolean useJsFilenameProvider = getInitParameter(Parameters.USE_JS_FILENAME_PROVIDER, false);
 		FileProvider fileProvider;
 		if (useClasspath) {
 			fileProvider = new ClassPathFileProvider();
 		} else {
 			fileProvider = new FileSystemFileProvider(rootDir);
 		}
-		IncludePatternFileNameProvider fileNameProvider = new IncludePatternFileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), fileProvider);
+		FileNameProvider fileNameProvider;
+		if (useJsFilenameProvider) {
+			try {
+				fileNameProvider = new JavascriptArrayFileNameProvider(fileProvider, getInitParameter(Parameters.JS_FILENAME_PROVIDER_SOURCE_FILE), getInitParameter(Parameters.JS_FILENAME_PROVIDER_VARNAME));
+			} catch (IOException e) {
+				throw new ServletException("Could not read filenames through JavascriptArrayFileNameProvider", e);
+			}
+		} else {
+			fileNameProvider = new IncludePatternFileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), fileProvider);
+		}
 		fastdeploy.setFileNameProvider(fileNameProvider);
 		fastdeploy.setFileProvider(fileProvider);
 		try {

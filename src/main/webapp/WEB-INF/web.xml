@@ -39,6 +39,30 @@
 			</param-value>
 		</init-param>
 	</servlet>
+	<servlet>
+		<servlet-name>js-javascript</servlet-name>
+		<servlet-class>com.robcos.onthefly.FastdeployServlet</servlet-class>
+		<init-param>
+			<param-name>content.type</param-name>
+			<param-value>text/javascript</param-value>
+		</init-param>
+		<init-param>
+			<param-name>use.jsfilenameprovider</param-name>
+			<param-value>true</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jsfilenameprovider.varname</param-name>
+			<param-value>myJsfiles</param-value>
+		</init-param>
+		<init-param>
+			<param-name>jsfilenameprovider.sourcefile</param-name>
+			<param-value>/filelist.js</param-value>
+		</init-param>
+		<init-param>
+			<param-name>use.classpath</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</servlet>
 	<servlet-mapping>
 		<servlet-name>js-filesystem</servlet-name>
 		<url-pattern>/test-filesystem.js</url-pattern>
@@ -46,5 +70,9 @@
 	<servlet-mapping>
 		<servlet-name>js-classpath</servlet-name>
 		<url-pattern>/test-classpath.js</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>js-javascript</servlet-name>
+		<url-pattern>/test-javascript.js</url-pattern>
 	</servlet-mapping>
 </web-app>
