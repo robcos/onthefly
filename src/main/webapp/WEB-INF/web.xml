@@ -19,8 +19,13 @@
 		<init-param>
 			<param-name>include.pattern</param-name>
 			<param-value>
-				**/*.js
+				/firstfile.js
+				/com/secondfile.js
 			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>use.classpath</param-name>
+			<param-value>true</param-value>
 		</init-param>
 	</servlet>
 	<servlet-mapping>

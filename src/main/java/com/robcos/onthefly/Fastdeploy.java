@@ -21,12 +21,13 @@ import com.yahoo.platform.yui.compressor.CssCompressor;
  */
 public class Fastdeploy {
 	private Log log = LogFactory.getLog(this.getClass());
-	private FilePatternParser filePatternParser = new FilePatternParser();
+	private FilePatternParser filePatternParser = new ClassPathFilePatternParser();
 	private String contentType;
 	private String includePattern;
 	private String rootDir;
 	private String cache;
 	private boolean useCache = false;
+	private boolean useClasspath = false;
 	private long lastModified;
 	private boolean useJavaScriptCompression;
 	private boolean useCssCompression;
@@ -38,6 +39,10 @@ public class Fastdeploy {
 
 	public void setUseCssCompression(boolean useCssCompression) {
 		this.useCssCompression = useCssCompression;
+	}
+
+	public void setUseClasspath(boolean useClasspath) {
+		this.useClasspath = useClasspath;
 	}
 
 	public String getContentType() {
@@ -81,7 +86,7 @@ public class Fastdeploy {
 		String[] lines = include.split("\n");
 		List<String> fileList = new ArrayList<String>();
 		for (String line : lines) {
-			List<String> list = this.filePatternParser.getFileNames(line, getRootDir());
+			List<String> list = this.filePatternParser.getFileNames(line);
 			for (String file : list) {
 				if (!fileList.contains(file)) {
 					fileList.add(file);
@@ -98,8 +103,7 @@ public class Fastdeploy {
 		}
 		StringBuffer content = new StringBuffer();
 		for (String filename : getFileNames()) {
-			FileReader fr = new FileReader(filename);
-			BufferedReader br = new BufferedReader(fr);
+			BufferedReader br = getResource(filename);
 			String line;
 			while ((line = br.readLine()) != null) {
 				content.append(line);
@@ -115,6 +119,21 @@ public class Fastdeploy {
 		}
 
 		return returnValue;
+	}
+
+	private BufferedReader getResource(String filename) throws FileNotFoundException {
+		if (!this.useClasspath) {
+			log.info("Trying to get resource " + filename + " from filesystem");
+			FileReader fr = new FileReader(filename);
+			return new BufferedReader(fr);
+		} else {
+			log.info("Trying to get resource " + filename + " from classpath");
+			InputStream stream = this.getClass().getResourceAsStream(filename);
+			if (stream == null) {
+				throw new FileNotFoundException("Could not find file " + filename + " in classpath");
+			}
+			return new BufferedReader(new InputStreamReader(stream));
+		}
 	}
 
 	private String compressJS(String returnValue) throws IOException {
@@ -167,6 +186,14 @@ public class Fastdeploy {
 		if (useCache) {
 			log.info("Filling cache for pattern " + getIncludePattern() + " on dir " + getRootDir());
 			cache = getContent();
+		}
+
+		if (useClasspath) {
+			System.err.println("ClassPathFilePatternParser");
+			filePatternParser = new ClassPathFilePatternParser();
+		} else {
+			System.err.println("FileSystemPatternParser on " + getRootDir());
+			filePatternParser = new FileSystemPatternParser(getRootDir());
 		}
 	}
 }

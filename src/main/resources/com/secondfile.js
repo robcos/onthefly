@@ -1,0 +1,3 @@
+function SecondFunctionReadFromClassPath() {
+	// some comments;
+}
