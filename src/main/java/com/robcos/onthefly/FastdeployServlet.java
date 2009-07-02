@@ -24,16 +24,15 @@ public class FastdeployServlet extends HttpServlet {
 		fastdeploy.setContentType(getInitParameter(Parameters.CONTENT_TYPE, "text/javascript"));
 		String rootDir = getInitParameter(Parameters.ROOT_DIR, getServletContext().getRealPath(""));
 		boolean useClasspath = getInitParameter(Parameters.USE_CLASSPATH, false);
-		FileProvider filePatternParser;
+		FileProvider fileProvider;
 		if (useClasspath) {
-			System.err.println("ClassPathFilePatternParser");
-			filePatternParser = new ClassPathFileProvider();
+			fileProvider = new ClassPathFileProvider();
 		} else {
-			System.err.println("FileSystemPatternParser on " + rootDir);
-			filePatternParser = new FileSystemFileProvider(rootDir);
+			fileProvider = new FileSystemFileProvider(rootDir);
 		}
-		FileNameProvider fileNameProvider = new FileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), filePatternParser);
+		IncludePatternFileNameProvider fileNameProvider = new IncludePatternFileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), fileProvider);
 		fastdeploy.setFileNameProvider(fileNameProvider);
+		fastdeploy.setFileProvider(fileProvider);
 		try {
 			fastdeploy.init();
 		} catch (IOException e) {

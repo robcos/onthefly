@@ -9,8 +9,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.ServletException;
 import javax.servlet.ServletOutputStream;
-import java.util.List;
-import java.util.ArrayList;
 import java.io.*;
 
 import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
@@ -22,6 +20,7 @@ import com.yahoo.platform.yui.compressor.CssCompressor;
 public class Fastdeploy {
 	private Log log = LogFactory.getLog(this.getClass());
 	private FileNameProvider fileNameProvider;
+	private FileProvider fileProvider;
 	private String contentType;
 	private String cache;
 	private boolean useCache = false;
@@ -36,6 +35,10 @@ public class Fastdeploy {
 
 	public void setFileNameProvider(FileNameProvider fileNameProvider) {
 		this.fileNameProvider = fileNameProvider;
+	}
+
+	public void setFileProvider(FileProvider fileProvider) {
+		this.fileProvider = fileProvider;
 	}
 
 	public void setUseCssCompression(boolean useCssCompression) {
@@ -70,7 +73,7 @@ public class Fastdeploy {
 		}
 		StringBuffer content = new StringBuffer();
 		for (String filename : fileNameProvider.getFileNames()) {
-			BufferedReader br = fileNameProvider.getResource(filename);
+			BufferedReader br = fileProvider.getResource(filename);
 			String line;
 			while ((line = br.readLine()) != null) {
 				content.append(line);
