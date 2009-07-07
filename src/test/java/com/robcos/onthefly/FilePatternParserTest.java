@@ -11,7 +11,7 @@ import java.util.List;
 import com.robcos.onthefly.FileProvider;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class FilePatternParserTest extends TestCase {
 	FileProvider parser;

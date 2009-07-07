@@ -1,7 +1,7 @@
 package com.robcos.onthefly;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class Parameters {
 	static final String CONTENT_TYPE = "content.type";

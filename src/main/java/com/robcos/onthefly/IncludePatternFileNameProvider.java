@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.io.*;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class IncludePatternFileNameProvider extends AbstractFileNameProvider {
 

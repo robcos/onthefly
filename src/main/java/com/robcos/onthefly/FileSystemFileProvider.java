@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class FileSystemFileProvider implements FileProvider {
 	private PatternMatcher patternMatcher = new PatternMatcher();

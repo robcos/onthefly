@@ -5,7 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public interface FileProvider {
 	List<String> getFileNames(String filePattern);

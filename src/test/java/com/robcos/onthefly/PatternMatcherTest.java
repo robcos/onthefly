@@ -8,7 +8,7 @@ import org.junit.After;
 import com.robcos.onthefly.PatternMatcher;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class PatternMatcherTest extends TestCase {
 	PatternMatcher patternMatcher = new PatternMatcher();

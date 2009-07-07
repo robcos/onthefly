@@ -8,7 +8,7 @@ import org.junit.After;
 import java.util.List;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class JavascriptArrayFileNameProviderTest extends TestCase {
 	JavascriptArrayFileNameProvider provider;

@@ -15,7 +15,7 @@ import com.yahoo.platform.yui.compressor.JavaScriptCompressor;
 import com.yahoo.platform.yui.compressor.CssCompressor;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class Fastdeploy {
 	private Log log = LogFactory.getLog(this.getClass());

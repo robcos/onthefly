@@ -1,7 +1,7 @@
 package com.robcos.onthefly;
 
 /**
- * @author robcos - roberto.cosenza@infoflexconnect.se
+ * @author robcos - robcos@robcos.com
  */
 public class PatternMatcher {
 	private static final String FILE_CHARS = "[0-9A-z\\-_\\.]";
