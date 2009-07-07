@@ -66,13 +66,13 @@ public class Fastdeploy {
 	}
 
 
-	private String getContent() throws IOException {
+	private String getContent(HttpServletRequest request) throws IOException {
 		if (cache != null) {
 			log.debug("Returning cached content");
 			return cache;
 		}
 		StringBuffer content = new StringBuffer();
-		for (String filename : fileNameProvider.getFileNames()) {
+		for (String filename : fileNameProvider.getFileNames(request)) {
 			BufferedReader br = fileProvider.getResource(filename);
 			String line;
 			while ((line = br.readLine()) != null) {
@@ -131,7 +131,7 @@ public class Fastdeploy {
 			httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() - MS_IN_A_YEAR);
 			httpServletResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		}
-		servletOutputStream.print(getContent());
+		servletOutputStream.print(getContent(httpServletRequest));
 		servletOutputStream.close();
 	}
 
@@ -141,7 +141,7 @@ public class Fastdeploy {
 
 		if (useCache) {
 			log.info("Filling cache");
-			cache = getContent();
+			cache = getContent(null);
 		}
 	}
 }

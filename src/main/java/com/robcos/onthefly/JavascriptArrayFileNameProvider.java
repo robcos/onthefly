@@ -14,7 +14,7 @@ import java.io.IOException;
  *
  * @author robcos - robcos@robcos.com
  */
-public class JavascriptArrayFileNameProvider implements FileNameProvider {
+public class JavascriptArrayFileNameProvider extends AbstractFileNameProvider {
 
 	private List<String> fileNames = new ArrayList<String>();
 

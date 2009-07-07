@@ -10,9 +10,8 @@ import java.io.*;
 /**
  * @author robcos - roberto.cosenza@infoflexconnect.se
  */
-public class IncludePatternFileNameProvider implements FileNameProvider {
+public class IncludePatternFileNameProvider extends AbstractFileNameProvider {
 
-	private Log log = LogFactory.getLog(this.getClass());
 	private FileProvider filePatternParser;
 	private String includePattern;
 

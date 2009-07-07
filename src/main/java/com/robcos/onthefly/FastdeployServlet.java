@@ -39,7 +39,7 @@ public class FastdeployServlet extends HttpServlet {
 				throw new ServletException("Could not read filenames through JavascriptArrayFileNameProvider", e);
 			}
 		} else {
-			fileNameProvider = new IncludePatternFileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), fileProvider);
+			fileNameProvider = new RequestParameterFileNameProvider(getInitParameter(Parameters.INCLUDE_PATTERN), fileProvider);
 		}
 		fastdeploy.setFileNameProvider(fileNameProvider);
 		fastdeploy.setFileProvider(fileProvider);
