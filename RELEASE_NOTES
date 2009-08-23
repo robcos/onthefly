@@ -1,3 +1,5 @@
+1.5
+Fixed character encoding (Thanks to Martin Algesten <algesten@mac.com>)
 1.4
 Added support to serve files through a request parameter
 1.3

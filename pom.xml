@@ -4,7 +4,7 @@
 	<groupId>com.robcos</groupId>
 	<artifactId>onthefly</artifactId>
 	<packaging>jar</packaging>
-	<version>1.4</version>
+	<version>1.5</version>
 	<build>
 		<plugins>
 			<plugin>

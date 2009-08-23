@@ -122,17 +122,21 @@ public class Fastdeploy {
 	}
 
 	public void handleRequest(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws ServletException, IOException {
-		ServletOutputStream servletOutputStream = httpServletResponse.getOutputStream();
-		httpServletResponse.setContentType(getContentType());
-		if (useCache) {
+
+      httpServletResponse.setContentType(getContentType());
+      PrintWriter writer = httpServletResponse.getWriter();
+
+	  if (useCache) {
 			httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() + MS_IN_A_YEAR);
 			httpServletResponse.setHeader("Cache-Control", "Cache-Control: public, max-age=31536000");
 		} else {
 			httpServletResponse.setDateHeader("Expires", System.currentTimeMillis() - MS_IN_A_YEAR);
 			httpServletResponse.setHeader("Cache-Control", "no-store, no-cache, must-revalidate");
 		}
-		servletOutputStream.print(getContent(httpServletRequest));
-		servletOutputStream.close();
+
+      writer.write(getContent(httpServletRequest));
+      writer.close();
+	  
 	}
 
 	public void init() throws IOException {
